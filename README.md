@@ -1,4 +1,4 @@
-# Python Lang Playground
+# Python Playground
 
 The purpose of this playground is to provide real working code.
 
