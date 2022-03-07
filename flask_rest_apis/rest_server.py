@@ -2,6 +2,7 @@
 # encoding: utf-8
 import json
 from flask import Flask, request, jsonify
+import os
 
 app = Flask(__name__)
 
@@ -9,7 +10,7 @@ app = Flask(__name__)
 def query_records():
     name = request.args.get('name')
     print(name)
-    with open('/tmp/data.txt', 'r') as f:
+    with open('./data.txt', 'r') as f:
         data = f.read()
         records = json.loads(data)
         for record in records:
@@ -20,14 +21,14 @@ def query_records():
 @app.route('/', methods=['PUT'])
 def create_record():
     record = json.loads(request.data)
-    with open('/tmp/data.txt', 'r') as f:
+    with open('./data.txt', 'r') as f:
         data = f.read()
     if not data:
         records = [record]
     else:
         records = json.loads(data)
         records.append(record)
-    with open('/tmp/data.txt', 'w') as f:
+    with open('./data.txt', 'w') as f:
         f.write(json.dumps(records, indent=2))
     return jsonify(record)
 
@@ -35,7 +36,7 @@ def create_record():
 def update_record():
     record = json.loads(request.data)
     new_records = []
-    with open('/tmp/data.txt', 'r') as f:
+    with open('./data.txt', 'r') as f:
         data = f.read()
         records = json.loads(data)
     for r in records:
@@ -50,15 +51,17 @@ def update_record():
 def delte_record():
     record = json.loads(request.data)
     new_records = []
-    with open('/tmp/data.txt', 'r') as f:
+    with open('./data.txt', 'r') as f:
         data = f.read()
         records = json.loads(data)
         for r in records:
             if r['name'] == record['name']:
                 continue
             new_records.append(r)
-    with open('/tmp/data.txt', 'w') as f:
+    with open('./data.txt', 'w') as f:
         f.write(json.dumps(new_records, indent=2))
     return jsonify(record)
 
-app.run(debug=True)
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 5000))
+    app.run(debug=True,host='0.0.0.0',port=port)    
