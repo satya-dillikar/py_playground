@@ -23,7 +23,7 @@ build-container :
 	@docker build -t dsatya6/$(NAME):$(VERSION) .
 
 push-container :
-	@docker push dsatya6/$(NAME):$(VERSION)	
+	@docker push dsatya6/$(NAME):$(VERSION)
 
 test-container :
 	@docker rm -f $(NAME) || true
@@ -32,3 +32,7 @@ test-container :
 	@docker ps
 	@sleep 5
 	@curl http://localhost:5000/\?name\=savir
+	@echo ""
+	@sleep 2
+	@docker stop $(NAME) || true
+	@docker rm -f $(NAME) || true
